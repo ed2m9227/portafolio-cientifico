@@ -89,7 +89,9 @@ export default function ProyectosPage() {
               <div className="space-y-3">
                 <h2 className="text-xl font-medium">
                   <Link
-                    href={`/proyectos/${p.slug}`}
+                    href={p.enlace}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:underline"
                   >
                     {p.titulo}
