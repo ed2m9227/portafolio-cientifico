@@ -1,41 +1,47 @@
 import Link from "next/link"
+import { proyectos } from "@/lib/proyectos"
 
-interface Proyecto {
+type EstadoProyecto = "Idea" | "En desarrollo" | "MVP"
+
+interface ProyectoAgrupado {
   id: string
   slug: string
-  dominio: string
   titulo: string
   area: string
   descripcion: string
-  enlace: string
+  estado: EstadoProyecto
+  enlace?: string
 }
 
-const proyectos: Proyecto[] = [
-  {
-    id: "TER-001",
-    slug: "montelibano-gen",
-    dominio: "territorio",
-    titulo: "MontelibanoGen - Plataforma análisis bioinformático de variación genética",
-    area: "Bioinformática",
-    descripcion:
-      "Proyecto de análisis de datos genéticos con enfoque en reproducibilidad y visualización científica.",
-    enlace: "https://e2m9227.shinyapps.io/MontelibanoGen/",
+const estadoConfig = {
+  "MVP": {
+    label: "MVP Disponible",
+    badge: "✓ Disponible",
+    color: "border-green-900 bg-green-950/20",
+    badgeColor: "bg-green-950 text-green-300"
   },
-  {
-    id: "INF-001",
-    slug: "biblioteca-mural-qr",
-    dominio: "infraestructura",
-    titulo: "Biblioteca mural QR",
-    area: "Cultura / Tecnología",
-    descripcion:
-      "Sistema de acceso a contenidos académicos mediante códigos QR en espacios físicos.",
-    enlace: "https://example.com",
+  "En desarrollo": {
+    label: "En Desarrollo",
+    badge: "⚙ En progreso",
+    color: "border-blue-900 bg-blue-950/20",
+    badgeColor: "bg-blue-950 text-blue-300"
   },
-  // … (los 17 restantes con el mismo esquema)
-]
+  "Idea": {
+    label: "Fase Concepto",
+    badge: "💡 Concepto",
+    color: "border-purple-900 bg-purple-950/20",
+    badgeColor: "bg-purple-950 text-purple-300"
+  }
+}
 
 
 export default function ProyectosPage() {
+  // Agrupar proyectos por estado
+  const proyectosAgrupados = (Object.keys(estadoConfig) as EstadoProyecto[]).reduce((acc, estado) => {
+    acc[estado] = proyectos.filter((p) => p.estado === estado)
+    return acc
+  }, {} as Record<EstadoProyecto, ProyectoAgrupado[]>)
+
   return (
     <main className="relative min-h-screen text-[#e6e8eb] px-6 py-20 overflow-hidden">
       {/* Fondo bio-02 */}
@@ -44,72 +50,108 @@ export default function ProyectosPage() {
         <div className="bg-bio-02 absolute inset-y-0 right-0 w-1/3 opacity-20 pointer-events-none" />
       </div>
 
-<div className="max-w-4xl mx-auto space-y-8 relative z-0">
-      <Link
-  href="/"
-  className="
-    inline-flex
-    items-center
-    gap-2
-    text-sm
-    text-[#8fa3ad]
-    hover:text-[#e6e8eb]
-    transition
-  "
->
-  ← Volver a inicio
-</Link>
+      <div className="max-w-6xl mx-auto space-y-8 relative z-0">
+        <Link
+          href="/"
+          className="
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            text-[#8fa3ad]
+            hover:text-[#e6e8eb]
+            transition
+          "
+        >
+          ← Volver a inicio
+        </Link>
 
-      <section className="max-w-6xl mx-auto space-y-10">
-        {/* Encabezado */}
-        <header className="space-y-4">
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            Portafolio cientifico, tecnológico y de innovación cultural
-          </h1>
-          <p className="text-[#9aa0a6] max-w-3xl">
-            Proyectos activos y en desarrollo organizados por dominio,
-            con enfoque académico, institucional y tecnológico.
-          </p>
-        </header>
+        <section className="space-y-10">
+          {/* Encabezado */}
+          <header className="space-y-4">
+            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
+              Portafolio científico, tecnológico y de innovación cultural
+            </h1>
+            <p className="text-[#9aa0a6] max-w-3xl">
+              Proyectos organizados por estado de desarrollo, con enfoque académico, 
+              institucional y tecnológico.
+            </p>
+          </header>
 
-        {/* Lista de proyectos */}
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {proyectos.map((p) => (
-            <li
-              key={p.id}
-              className="
-                bg-[#161a22]
-                border border-[#232838]
-                rounded-lg
-                p-6
-                transition
-                hover:border-[#8fa3ad]
-              "
-            >
-              <div className="space-y-3">
-                <h2 className="text-xl font-medium">
-                  <Link
-                    href={p.enlace}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                  >
-                    {p.titulo}
-                  </Link>
-                </h2>
+          {/* Proyectos agrupados por estado */}
+          {(Object.keys(estadoConfig) as EstadoProyecto[]).map((estado) => {
+            const proyectosDelEstado = proyectosAgrupados[estado]
+            if (proyectosDelEstado.length === 0) return null
 
-                <p className="text-sm text-[#9aa0a6]">
-                  {p.area}
-                </p>
+            const config = estadoConfig[estado]
 
-                <p className="text-xs text-[#8fa3ad] uppercase tracking-wide">
-                  {p.dominio}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+            return (
+              <section key={estado} className="space-y-4">
+                {/* Encabezado del estado */}
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-semibold">{config.label}</h2>
+                  <p className="text-sm text-[#9aa0a6]">
+                    {proyectosDelEstado.length} proyecto{proyectosDelEstado.length !== 1 ? "s" : ""}
+                  </p>
+                </div>
+
+                {/* Grid de proyectos */}
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {proyectosDelEstado.map((p) => (
+                    <li
+                      key={p.id}
+                      className={`
+                        border rounded-lg p-6 transition
+                        hover:border-[#8fa3ad] ${config.color}
+                      `}
+                    >
+                      <div className="space-y-4">
+                        {/* Badge de estado */}
+                        <div className={`inline-block text-xs px-3 py-1 rounded ${config.badgeColor}`}>
+                          {config.badge}
+                        </div>
+
+                        {/* Título */}
+                        <h3 className="text-lg font-medium leading-snug">
+                          {p.titulo}
+                        </h3>
+
+                        {/* Descripción */}
+                        <p className="text-sm text-[#9aa0a6]">
+                          {p.descripcion}
+                        </p>
+
+                        {/* Metadatos */}
+                        <div className="flex items-center justify-between pt-2">
+                          <span className="text-xs text-[#8fa3ad] uppercase tracking-wide">
+                            {p.area}
+                          </span>
+                          <span className="text-xs text-[#6a7178]">
+                            {p.id}
+                          </span>
+                        </div>
+
+                        {/* Enlace a la plataforma (si existe) */}
+                        {p.enlace && (
+                          <div className="pt-3">
+                            <a
+                              href={p.enlace}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-sm text-[#8fa3ad] hover:underline"
+                            >
+                              Abrir plataforma →
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          })}
+        </section>
       </div>
     </main>
   )

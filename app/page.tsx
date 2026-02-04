@@ -1,6 +1,8 @@
+import Footer from './components/Footer';
+
 export default function Home() {
   return (
-    <main className="relative min-h-screen text-[#e6e8eb] px-8 py-20 overflow-hidden">
+    <main className="relative min-h-screen text-[#e6e8eb] px-8 py-20 overflow-hidden flex flex-col">
       {/* Fondo sutilizado - Optimizado para memoria */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[#0f1115]" />
@@ -9,7 +11,7 @@ export default function Home() {
       </div>
 
       {/* Contenido */}
-      <div className="relative z-0">
+      <div className="relative z-0 grow">
       <section>
         <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
           Laboratorio Científico Digital diseñado y desarrollado por Eduardo
@@ -57,6 +59,9 @@ export default function Home() {
         </a>
       </section>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
