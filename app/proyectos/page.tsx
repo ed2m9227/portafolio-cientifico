@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { proyectos } from "@/lib/proyectos"
+import Footer from "@/app/components/Footer"
 
 type EstadoProyecto = "Idea" | "En desarrollo" | "MVP"
 
@@ -51,21 +52,7 @@ export default function ProyectosPage() {
       </div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-0">
-        <Link
-          href="/"
-          className="
-            inline-flex
-            items-center
-            gap-2
-            text-sm
-            text-[#8fa3ad]
-            hover:text-[#e6e8eb]
-            transition
-          "
-        >
-          ← Volver a inicio
-        </Link>
-
+        
         <section className="space-y-10">
           {/* Encabezado */}
           <header className="space-y-4">
@@ -153,6 +140,8 @@ export default function ProyectosPage() {
           })}
         </section>
       </div>
+
+      <Footer />
     </main>
   )
 }

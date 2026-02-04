@@ -52,6 +52,17 @@ export default function Header() {
             </Link>
           </li>
           <li>
+            <a
+              href="/Eduardo_Martinez_CV.pdf"
+              className="hover:text-[#e6e8eb] transition-colors duration-200"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
+              CV
+            </a>
+          </li>
+          <li>
             <Link
               href="/contact"
               className="px-3 py-1 rounded border border-[#8fa3ad] hover:border-[#e6e8eb] hover:text-[#e6e8eb] transition-colors duration-200"
